@@ -1,3 +1,5 @@
+/// <reference path="../../../node_modules/reflect-metadata/reflect-metadata.d.ts"/>
+
 import {Type, Injectable, Input, Component, ViewEncapsulation} from 'angular2/core';
 import {
   RouteConfig,
@@ -28,7 +30,7 @@ export class AppNav {
 }
 
 @Injectable()
-class DynamicRouteCreator {
+class DynamicRouteConfigurator {
   constructor(private registry: RouteRegistry) {}
   addRoute(component: Type, route) {
     let routeConfig = this.getRoutes(component);
@@ -64,7 +66,7 @@ class DynamicRouteCreator {
 
 @Component({
   selector: 'app',
-  viewProviders: [NameList, DynamicRouteCreator],
+  viewProviders: [NameList, DynamicRouteConfigurator],
   templateUrl: './components/app/app.html',
   styleUrls: ['./components/app/app.css'],
   encapsulation: ViewEncapsulation.None,
@@ -75,16 +77,16 @@ class DynamicRouteCreator {
 ])
 export class AppCmp {
   appRoutes: string[][];
-  constructor(private dynamicRouteCreator: DynamicRouteCreator) {
+  constructor(private dynamicRouteConfigurator: DynamicRouteConfigurator) {
     this.appRoutes = this.getAppRoutes();
     setTimeout(_ => {
       let route = { path: '/about', component: AboutCmp, as: 'About' };
-      this.dynamicRouteCreator.addRoute(this.constructor, route);
+      this.dynamicRouteConfigurator.addRoute(this.constructor, route);
       this.appRoutes = this.getAppRoutes();
     }, 1000);
   }
   private getAppRoutes(): string[][] {
-    return this.dynamicRouteCreator
+    return this.dynamicRouteConfigurator
       .getRoutes(this.constructor).configs.map(route => {
         return { path: [`/${route.as}`], name: route.as };
       });
