@@ -35,7 +35,7 @@ class DynamicRouteConfigurator {
   addRoute(component: Type, route) {
     let routeConfig = this.getRoutes(component);
     routeConfig.configs.push(route);
-    this.updateRoutes(component, routeConfig);
+    this.updateRouteConfig(component, routeConfig);
     this.registry.config(component, route);
   }
   removeRoute() {
@@ -47,7 +47,7 @@ class DynamicRouteConfigurator {
         return a.constructor.name === 'RouteConfig';
       }).pop();
   }
-  updateRoutes(component: Type, routeConfig) {
+  updateRouteConfig(component: Type, routeConfig) {
     let annotations = Reflect.getMetadata('annotations', component);
     let routeConfigIndex = -1;
     for (let i = 0; i < annotations.length; i += 1) {
