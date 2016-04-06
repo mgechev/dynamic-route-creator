@@ -60,7 +60,7 @@ class DynamicRouteConfigurator {
       throw new Error('No route metadata attached to the component');
     }
     annotations[routeConfigIndex] = routeConfig;
-    Reflect.defineMetadata('annotations', annotations, AppCmp);
+    Reflect.defineMetadata('annotations', annotations, component);
   }
 }
 
